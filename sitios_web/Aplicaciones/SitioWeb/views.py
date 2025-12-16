@@ -128,6 +128,7 @@ def edicion_tecnologia(request):
         return redirect('listado_tecnologias')
 
 
+ 
 def eliminar_tecnologia(request, id):
     tecnologia = get_object_or_404(Tecnologias, id=id)
     tecnologia.delete()
