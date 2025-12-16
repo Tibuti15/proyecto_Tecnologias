@@ -1,0 +1,95 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+
+<div style="margin:auto; width:50%; padding:20px; border:1px solid #ccc;">
+    <h2 style="text-align:center;">Editar Sitio Web</h2>
+    <br>
+
+    <form enctype="multipart/form-data"
+          action="{% url 'edicion_sitio' %}"
+          method="post"
+          id="frm_editar_sitio">
+
+        {% csrf_token %}
+
+        <!-- ID OCULTO -->
+        <input type="hidden" name="id" value="{{ sitio.id }}">
+
+        <label><b>Nombre del sitio:</b></label>
+        <input type="text"
+               name="nombre"
+               id="nombre"
+               value="{{ sitio.nombre }}"
+               style="width:100%; padding:6px;">
+        <br><br>
+
+        <label><b>URL:</b></label>
+        <input type="url"
+               name="url"
+               id="url"
+               value="{{ sitio.url }}"
+               style="width:100%; padding:6px;">
+        <br><br>
+
+        <label><b>Creador:</b></label>
+        <input type="text"
+               name="creador"
+               id="creador"
+               value="{{ sitio.creador }}"
+               style="width:100%; padding:6px;">
+        <br><br>
+
+        <label><b>Tecnología:</b></label>
+        <select name="tecnologia" id="tecnologia"
+                style="width:100%; padding:6px;">
+            {% for t in tecnologias %}
+                <option value="{{ t.id }}"
+                    {% if sitio.tecnologias.id == t.id %}selected{% endif %}>
+                    {{ t.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label><b>Foto / Logo:</b></label><br>
+        {% if sitio.foto %}
+            <img src="{{ sitio.foto.url }}" height="60"><br><br>
+        {% endif %}
+        <input type="file" name="foto" id="foto">
+        <br><br>
+
+        <div style="text-align:center;">
+            <button type="submit" class="btn btn-primary">
+                Actualizar
+            </button>
+            <a href="{% url 'index' %}" class="btn btn-danger">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
+
+<!-- VALIDACIÓN -->
+<script>
+$(document).ready(function(){
+    $("#frm_editar_sitio").validate({
+        rules:{
+            nombre:{ required:true },
+            url:{ required:true, url:true },
+            creador:{ required:true },
+            tecnologia:{ required:true }
+        },
+        messages:{
+            nombre:{ required:"Ingrese el nombre del sitio" },
+            url:{ required:"Ingrese la URL", url:"URL no válida" },
+            creador:{ required:"Ingrese el creador" },
+            tecnologia:{ required:"Seleccione una tecnología" }
+        }
+    });
+});
+</script>
+
+{% endblock %}
+

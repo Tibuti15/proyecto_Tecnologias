@@ -1,0 +1,93 @@
+{% extends './plantilla.html' %}
+
+{% block contenido %}
+
+<div style="margin:auto; width:50%; padding:20px; border:1px solid #ccc;">
+    <h2 style="text-align:center;"> Registrar Nueva Tecnología</h2>
+    <br>
+
+    <form enctype="multipart/form-data"
+          action="{% url 'guardar_tecnologia' %}"
+          method="post"
+          id="frm_nueva_tecnologia">
+
+        {% csrf_token %}
+
+        <label><b>Nombre:</b></label>
+        <input type="text"
+               name="nombre"
+               id="nombre"
+               placeholder="Ingrese el nombre de la tecnología"
+               style="width:100%; padding:6px;">
+
+        <br><br>
+
+        <label><b>Descripción:</b></label>
+        <textarea name="descripcion"
+                  id="descripcion"
+                  placeholder="Ingrese la descripción"
+                  style="width:100%; padding:6px;"
+                  rows="4"></textarea>
+
+        <br><br>
+
+        <b>Foto:</b>
+        <input type="file" name="foto" id="foto">
+
+        <br><br>
+
+        <div style="text-align:center;">
+            <button type="submit"
+                    class="btn btn-primary"
+                    style="padding:6px 20px;">
+                Guardar
+            </button>
+
+            <a href="{% url 'listado_tecnologias' %}"
+               class="btn btn-danger"
+               style="margin-left:10px;">
+                Cancelar y volver
+            </a>
+        </div>
+
+    </form>
+</div>
+
+<!-- VALIDACIÓN -->
+<script>
+$(document).ready(function(){
+
+    $("#frm_nueva_tecnologia").validate({
+        rules:{
+            nombre:{
+                required:true
+            },
+            descripcion:{
+                required:true
+            }
+        },
+        messages:{
+            nombre:{
+                required:"Por favor ingrese el nombre de la tecnología"
+            },
+            descripcion:{
+                required:"Por favor ingrese la descripción"
+            }
+        }
+    });
+
+});
+</script>
+
+<!-- FILEINPUT -->
+<script>
+$("#foto").fileinput({
+    language: "es",
+    allowedFileExtensions: ["png", "jpg", "jpeg"],
+    showCaption: false,
+    dropZoneEnabled: true,
+    showClose: false
+});
+</script>
+
+{% endblock %}

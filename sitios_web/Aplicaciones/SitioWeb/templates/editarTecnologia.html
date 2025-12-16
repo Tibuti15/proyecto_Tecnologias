@@ -1,0 +1,65 @@
+{% extends './plantilla.html' %}
+
+{% block contenido %}
+
+<div style="margin:auto; width:50%; padding:20px; border:1px solid #ccc;">
+    <h2 style="text-align:center;">Editar Tecnología</h2>
+    <br>
+
+    <form enctype="multipart/form-data"
+          action="{% url 'edicion_tecnologia' %}"
+          method="post"
+          id="frm_editar_tecnologia">
+
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ tecnologia.id }}">
+
+        <label><b>Nombre:</b></label>
+        <input type="text"
+               name="nombre"
+               value="{{ tecnologia.nombre }}"
+               style="width:100%; padding:6px;">
+        <br><br>
+
+        <label><b>Descripción:</b></label>
+        <textarea name="descripcion"
+                  style="width:100%; padding:6px;"
+                  rows="4">{{ tecnologia.descripcion }}</textarea>
+        <br><br>
+
+        <label><b>Foto:</b></label><br>
+        {% if tecnologia.foto %}
+            <img src="{{ tecnologia.foto.url }}" height="60"><br><br>
+        {% endif %}
+        <input type="file" name="foto">
+        <br><br>
+
+        <div style="text-align:center;">
+            <button type="submit" class="btn btn-primary">
+                Actualizar
+            </button>
+            <a href="{% url 'listado_tecnologias' %}" class="btn btn-danger">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+$(document).ready(function(){
+    $("#frm_editar_tecnologia").validate({
+        rules:{
+            nombre:{ required:true },
+            descripcion:{ required:true }
+        },
+        messages:{
+            nombre:{ required:"Ingrese el nombre" },
+            descripcion:{ required:"Ingrese la descripción" }
+        }
+    });
+});
+</script>
+
+{% endblock %}
+

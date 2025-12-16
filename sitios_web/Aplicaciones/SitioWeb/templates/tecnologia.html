@@ -1,0 +1,84 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<h1 style="text-align:center; margin-bottom:20px;">Listado de Tecnologías</h1>
+
+<div style="width:80%; margin:auto;">
+
+    <a href="{% url 'nueva_tecnologia' %}"
+       style="display:block; margin-bottom:15px; text-align:center; text-decoration:none;">
+        <i class="fa fa-plus"></i>
+        Agregar Tecnología
+    </a>
+
+    <table id="tbl_tecnologias" border="1" cellpadding="8" cellspacing="0"
+           style="width:100%; border-collapse:collapse; text-align:center;">
+
+        <thead>
+            <tr style="background-color:#333; color:white;">
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Foto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for t in tecnologias %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.nombre }}</td>
+                <td>{{ t.descripcion }}</td>
+                <td>
+                    {% if t.foto %}
+                        <img src="{{ t.foto.url }}" height="50px" alt="">
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'editar_tecnologia' t.id %}" title="Editar">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a href="{% url 'eliminar_tecnologia' t.id %}"
+                       onclick="return confirm('¿Estas seguro de eliminar?')"
+                       title="Eliminar">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    new DataTable('#tbl_tecnologias', {
+        language: {
+            emptyTable: "No existen tecnologías registradas",
+            search: "Buscar:",
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ registros"
+        },
+        columnDefs: [
+            { orderable: false, targets: [3,4] }
+        ],
+        layout: {
+            topStart: {
+                buttons: [
+                    { extend: 'copyHtml5', className: 'btn btn-secondary btn-sm' },
+                    { extend: 'excelHtml5', className: 'btn btn-success btn-sm' },
+                    { extend: 'csvHtml5', className: 'btn btn-info btn-sm' },
+                    { extend: 'pdfHtml5', className: 'btn btn-danger btn-sm' }
+                ]
+            }
+        }
+    });
+</script>
+
+{% endblock %}
+
+
+

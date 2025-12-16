@@ -1,0 +1,72 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<h1 style="text-align:center; margin-bottom:20px;">Listado de Sitios</h1>
+
+<div style="width:80%; margin:auto;">
+    <a href="{% url 'nuevo_sitio' %}" 
+       style="display:block; margin-bottom:15px; text-align:center; text-decoration:none;">
+       <i class="fa fa-plus"></i>
+       Agregar Sitio
+    </a>
+    <table id="tbl_sitios" border="1" cellpadding="8" cellspacing="0" 
+           style="width:100%; border-collapse:collapse; text-align:center;">
+        <thead>
+            <tr style="background-color:#333; color:white;">
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>URL</th>
+                <th>Creador</th>
+                <th>Tecnología</th>
+                <th>Foto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in sitios %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.nombre }}</td>
+                <td><a href="{{ p.url }}" target="_blank">{{ p.url }}</a></td>
+                <td>{{ p.creador }}</td>
+                <td>{{ p.tecnologias.nombre }}</td>
+                <td>
+                    {% if p.foto %}
+                        <img src="{{ p.foto.url }}" height="50px" alt="{{ p.nombre }}">
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'editar_sitio' p.id %}" title="Editar">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a href="{% url 'eliminar_sitio' p.id %}" 
+                       onclick="return confirm('¿Estás seguro de eliminar?')" 
+                       title="Eliminar">
+                       <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+   new DataTable('#tbl_sitios', {
+        layout: {
+            topStart: {
+                buttons: [
+                    { extend: 'copyHtml5', className: 'btn btn-secondary btn-sm' },
+                    { extend: 'excelHtml5', className: 'btn btn-success btn-sm' },
+                    { extend: 'csvHtml5', className: 'btn btn-info btn-sm' },
+                    { extend: 'pdfHtml5', className: 'btn btn-danger btn-sm' }
+                ]
+            }
+        }
+    });
+</script>
+
+{% endblock %}
